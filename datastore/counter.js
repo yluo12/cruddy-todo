@@ -16,6 +16,8 @@ const zeroPaddedNumber = (num) => {
 };
 
 const readCounter = (callback) => {
+  console.log("What is my file path??");
+  console.log(exports.counterFile);
   fs.readFile(exports.counterFile, (err, fileData) => {
     if (err) {
       callback(null, 0);
@@ -39,12 +41,44 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 
 exports.getNextUniqueId = () => {
-  counter = counter + 1;
+  // invoke readCounter, readCounter would return counter if successfully
+
+   // 1. first read the counter.txt file => call readCounter function
+  var counter = readCounter((param1, fileData) => {
+
+    // if fileData is retrieved
+    console.log("file DATA");
+    console.log(fileData);
+    if (fileData !== 0) { // it was successful
+      // return fileData(number)
+      // check if the counter file exists, if not create the counter.txt file
+      return fileData;
+    } else {    // if fileData is not present,
+      console.log("Reading is unsuccessful!");
+
+    }
+  });
+
+
+   // 1. first read the counter.txt file => call readCounter function +
+    //inside readCounter:
+      //1.1 if reading is successful, check if the counter file exists, if not create the counter.txt file
+       // 1.1.1 if file exists but error happens, do nothing simply display error message/similar things
+      //1.2 if not, we would not update anything, give error
+    // Result of step 1: return counter from the file
+  // 2. increment the counter value
+    counter = counter + 1;
+  // 3. call writeCounter function with the new counter from step 1 as param + callback
+      //inside writeCounter:
+      //3.1 if writing is successful, we have to update the counter and write it to the counter file
+      //3.2 if writing is not successful, do nothing just error message
+
   return zeroPaddedNumber(counter);
+
 };
 
-
+// file path ->>>>>> ./counter.txt
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 
-exports.counterFile = path.join(__dirname, 'counter.txt');
+exports.counterFile = path.join(__dirname, 'counter.txt'); // create counterfile
